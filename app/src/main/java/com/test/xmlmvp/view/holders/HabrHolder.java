@@ -1,10 +1,9 @@
 package com.test.xmlmvp.view.holders;
 
+import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.test.xmlmvp.R;
@@ -16,7 +15,7 @@ import com.test.xmlmvp.model.response.Item;
 
 public class HabrHolder extends RecyclerView.ViewHolder {
 
-    private WebView description;
+    private TextView description;
     private TextView author;
     private TextView title;
     private TextView date;
@@ -31,16 +30,10 @@ public class HabrHolder extends RecyclerView.ViewHolder {
         tags = itemView.findViewById(R.id.tags);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     public void setData(Item item) {
         author.setText(item.getCreator());
-        description.setVisibility(View.GONE);
-        //If you want show description than uncomment this code
-        /*description.getSettings().setJavaScriptEnabled(true);
-        description.getSettings().setBuiltInZoomControls(true);
-        description.setInitialScale(50);
-        description.getSettings().setUseWideViewPort(true);
-        description.loadData(item.getDescription(), "text/html", "UTF-8");*/
-
+        description.setText(Html.fromHtml(item.getDescription()));
         title.setText(item.getTitle());
         date.setText(item.getPubDate());
         StringBuilder stringTags = new StringBuilder();
