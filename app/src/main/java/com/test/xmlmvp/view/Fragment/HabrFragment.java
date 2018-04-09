@@ -3,6 +3,7 @@ package com.test.xmlmvp.view.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ public class HabrFragment extends Fragment implements HabrFragmentView {
     private HabrFragmentPresenter presenter;
     private RecyclerView habrList;
     private HabrListAdapter adapter;
+    private SwipeRefreshLayout swipeContainer;
 
 
     @Override
@@ -42,21 +44,32 @@ public class HabrFragment extends Fragment implements HabrFragmentView {
             presenter = new HabrFragmentPresenterImpl(this);
             adapter = new HabrListAdapter();
         }
-        habrList = view.findViewById(R.id.habrList);
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        habrList = (RecyclerView) view.findViewById(R.id.habrList);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         habrList.setLayoutManager(llm);
-
         habrList.setAdapter(adapter);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.getHabrData();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_dark);
+
         return view;
     }
 
     @Override
     public void onSuccessRequest(Rss result) {
-        adapter.setData(result.getChannel().get(0).getItem());
+        getActivity().setTitle(result.getChannel().getTitle());
+        adapter.setData(result.getChannel().getItem());
+        swipeContainer.setRefreshing(false);
     }
 
     @Override
     public void showError(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        swipeContainer.setRefreshing(false);
     }
 }

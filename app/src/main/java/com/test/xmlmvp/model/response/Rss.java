@@ -1,6 +1,7 @@
 package com.test.xmlmvp.model.response;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -11,16 +12,16 @@ import java.util.List;
  */
 @Root(name = "rss")
 public class Rss {
-    @ElementList(inline = true, name = "channel")
-    private List<Channel> channel;
+    @Element(name = "channel")
+    private Channel channel;
     @Attribute
     private String version;
 
-    public List<Channel> getChannel() {
+    public Channel getChannel() {
         return channel;
     }
 
-    public void setChannel(List<Channel> channel) {
+    public void setChannel(Channel channel) {
         this.channel = channel;
     }
 

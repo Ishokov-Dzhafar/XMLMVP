@@ -36,8 +36,11 @@ public class HabrFragmentInteractorImpl implements HabrFragmentInteractor {
     @Override
     public void getData() {
         Log.d("INTERNET", task.getStatus().name());
-        if (task.getStatus() == AsyncTask.Status.PENDING)
+        if (task.getStatus() == AsyncTask.Status.PENDING || task.getStatus() == AsyncTask.Status.FINISHED) {
+            task = new HabrTask();
             task.execute("https://habrahabr.ru/rss/hubs/all/");
+        }
+
     }
 
     private class HabrTask extends AsyncTask<String, String, String> {
