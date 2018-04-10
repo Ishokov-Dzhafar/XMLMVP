@@ -35,7 +35,6 @@ public class HabrFragmentInteractorImpl implements HabrFragmentInteractor {
 
     @Override
     public void getData() {
-        Log.d("INTERNET", task.getStatus().name());
         if (task.getStatus() == AsyncTask.Status.PENDING || task.getStatus() == AsyncTask.Status.FINISHED) {
             task = new HabrTask();
             task.execute("https://habrahabr.ru/rss/hubs/all/");
@@ -64,7 +63,6 @@ public class HabrFragmentInteractorImpl implements HabrFragmentInteractor {
                 conn.setReadTimeout(READ_TIMEOUT);
                 conn.setConnectTimeout(CONNECTION_TIMEOUT);
                 if (conn.getResponseCode() == HttpsURLConnection.HTTP_OK) {
-                    // Do normal input or output stream reading
                     try {
                         InputStreamReader in = new InputStreamReader(conn.getInputStream());
                         BufferedReader reader = new BufferedReader(in);
@@ -75,7 +73,6 @@ public class HabrFragmentInteractorImpl implements HabrFragmentInteractor {
                         reader.close();
                         in.close();
                         result = stringBuilder.toString();
-                        Log.d("Connection", result);
                     } finally {
                         conn.disconnect();
                     }
@@ -96,7 +93,6 @@ public class HabrFragmentInteractorImpl implements HabrFragmentInteractor {
                 Serializer serializer = new Persister();
                 try {
                     Rss habrResopnse = serializer.read(Rss.class, s);
-                    //Log.d("XML", "success " + habrResopnse.getChannel().get(0).getTitle());
                     presenter.onSuccessRequest(habrResopnse);
                 } catch (Exception e) {
                     e.printStackTrace();
