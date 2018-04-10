@@ -31,6 +31,7 @@ public class HabrFragment extends Fragment implements HabrFragmentView {
     private RecyclerView habrList;
     private HabrListAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
+    private String title;
 
 
     @Override
@@ -46,6 +47,9 @@ public class HabrFragment extends Fragment implements HabrFragmentView {
         if (savedInstanceState == null) {
             presenter = new HabrFragmentPresenterImpl(this);
             adapter = new HabrListAdapter();
+        }
+        if (title != null) {
+            changeTitle();
         }
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         habrList = (RecyclerView) view.findViewById(R.id.habrList);
@@ -65,9 +69,14 @@ public class HabrFragment extends Fragment implements HabrFragmentView {
 
     @Override
     public void onSuccessRequest(Rss result) {
-        getActivity().setTitle(result.getChannel().getTitle());
+        title = result.getChannel().getTitle();
+        changeTitle();
         adapter.setData(result.getChannel().getItem());
         swipeContainer.setRefreshing(false);
+    }
+
+    private void changeTitle() {
+        getActivity().setTitle(title);
     }
 
     @Override

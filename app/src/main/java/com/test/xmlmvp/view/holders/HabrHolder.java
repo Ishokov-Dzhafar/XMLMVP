@@ -30,7 +30,6 @@ public class HabrHolder extends RecyclerView.ViewHolder {
         tags = itemView.findViewById(R.id.tags);
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     public void setData(Item item) {
         author.setText(item.getCreator());
         description.setText(Html.fromHtml(item.getDescription()));
